@@ -3,7 +3,8 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { siteConfig } from "@/siteConfig";
-import { Zap, ArrowUpRight, Star } from "lucide-react";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
+import { Zap, ArrowUpRight, Star, MessageCircle } from "lucide-react";
 
 export default function LaserSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,11 +56,14 @@ export default function LaserSection() {
           </motion.p>
         </div>
 
-        {/* Price grid */}
+        {/* Price grid — cada card es un link a WhatsApp con mensaje personalizado */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {laser.packages.map((pkg, i) => (
-            <motion.div
+            <motion.a
               key={i}
+              href={buildWhatsAppUrl(WA_MESSAGES.laser(pkg.zone, pkg.price))}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -68,7 +72,8 @@ export default function LaserSection() {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className={`glass-card p-5 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300 ${
+              className={`glass-card p-5 flex flex-col gap-3 group cursor-pointer
+                hover:scale-[1.03] hover:border-white/15 transition-all duration-300 ${
                 pkg.featured
                   ? "border-[var(--color-primary)]/30 ring-1 ring-[var(--color-primary)]/20"
                   : ""
@@ -93,7 +98,7 @@ export default function LaserSection() {
 
               <p className="text-white/30 text-xs">{pkg.sessions} sesiones</p>
 
-              <div className="mt-auto">
+              <div className="mt-auto flex items-end justify-between">
                 <p
                   className="text-2xl font-bold"
                   style={{
@@ -105,32 +110,26 @@ export default function LaserSection() {
                 >
                   {pkg.price}
                 </p>
+                {/* Ícono sutil que aparece en hover */}
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white/40">
+                  <MessageCircle size={15} />
+                </span>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        {/* Hint debajo del grid */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-12 text-center"
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-center text-white/20 text-xs mt-5 flex items-center justify-center gap-1.5"
         >
-          <a
-            href={siteConfig.brand.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-[#0d0d0d] font-semibold px-8 py-3.5 rounded-full text-sm hover:scale-[1.03] transition-transform duration-200 shadow-lg shadow-[#e8a0b4]/15"
-          >
-            Consultar disponibilidad
-            <ArrowUpRight size={15} />
-          </a>
-          <p className="text-white/30 text-xs mt-3">
-            Agenda por WhatsApp · {siteConfig.brand.contactPhone}
-          </p>
-        </motion.div>
+          <MessageCircle size={11} />
+          Toca cualquier paquete para consultar por WhatsApp
+        </motion.p>
       </div>
     </section>
   );

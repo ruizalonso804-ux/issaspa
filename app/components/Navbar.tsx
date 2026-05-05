@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/siteConfig";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
 import { Phone } from "lucide-react";
 
 const links = [
@@ -73,7 +74,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <a
-          href={siteConfig.brand.whatsappUrl}
+          href={buildWhatsAppUrl(WA_MESSAGES.generic)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 bg-[var(--color-primary)] text-[#0d0d0d] text-xs font-semibold px-4 py-1.5 rounded-full hover:scale-[1.03] transition-transform duration-200"

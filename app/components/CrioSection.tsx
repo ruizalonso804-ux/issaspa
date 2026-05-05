@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/siteConfig";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
 import { ArrowUpRight, Snowflake } from "lucide-react";
 
 export default function CrioSection() {
@@ -90,7 +91,7 @@ export default function CrioSection() {
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2"
             >
               <a
-                href={siteConfig.brand.whatsappUrl}
+                href={buildWhatsAppUrl(WA_MESSAGES.crio())}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 font-semibold px-7 py-3.5 rounded-full text-sm hover:scale-[1.03] transition-transform duration-200"

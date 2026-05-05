@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/siteConfig";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
 import { ArrowDown } from "lucide-react";
 
 const words = siteConfig.sections.hero.title.split(/\s+/);
@@ -100,7 +101,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center gap-4"
         >
           <a
-            href={siteConfig.brand.whatsappUrl}
+            href={buildWhatsAppUrl(WA_MESSAGES.generic)}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[var(--color-primary)] text-[#0d0d0d] font-semibold px-8 py-3.5 rounded-full text-sm tracking-wide hover:scale-[1.03] transition-transform duration-200 shadow-lg shadow-[#e8a0b4]/20"

@@ -1,13 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { siteConfig } from "@/siteConfig";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
 import { MessageCircle } from "lucide-react";
 
 export default function WhatsAppButton() {
   return (
     <motion.a
-      href={siteConfig.brand.whatsappUrl}
+      href={buildWhatsAppUrl(WA_MESSAGES.generic)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contactar por WhatsApp"

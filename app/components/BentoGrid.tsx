@@ -4,6 +4,7 @@ import { useRef, MouseEvent, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/siteConfig";
+import { buildWhatsAppUrl, WA_MESSAGES } from "@/app/lib/whatsapp";
 import { ArrowUpRight } from "lucide-react";
 
 function BentoCard({
@@ -110,7 +111,7 @@ function BentoCard({
         </p>
 
         <a
-          href={siteConfig.brand.whatsappUrl}
+          href={buildWhatsAppUrl(WA_MESSAGES.service(service.title))}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide px-4 py-2 rounded-full border transition-all duration-200 hover:scale-[1.02]"
