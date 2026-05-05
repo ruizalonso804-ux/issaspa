@@ -66,7 +66,7 @@ export const siteConfig = {
         title: "Estética & Complementos",
         description:
           "Diseño de pestañas, uñas y tratamientos de manos. El detalle que hace la diferencia.",
-        image: "/assets/ambiente.jpg",
+        image: "/assets/estetica-bg.jpg",
         accent: "#E8A0B4",
         size: "large",
       },
