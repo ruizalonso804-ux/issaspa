@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, MouseEvent } from "react";
+import { useRef, MouseEvent, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/siteConfig";
@@ -14,6 +14,19 @@ function BentoCard({
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  // Detect mobile (no hover) vs desktop (hover available)
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Scroll-based: card visible in viewport
+  const imageInView = useInView(imageRef, { once: false, amount: 0.45 });
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     const el = cardRef.current;
@@ -26,6 +39,14 @@ function BentoCard({
   };
 
   const isLarge = service.size === "large";
+
+  // Mobile: scroll-triggered color reveal
+  // Desktop: stays grayscale until hover (whileHover)
+  const filterAnimate = isMobile
+    ? { filter: imageInView ? "grayscale(0%)" : "grayscale(100%)" }
+    : { filter: "grayscale(100%)" };
+
+  const filterHover = !isMobile ? { filter: "grayscale(0%)" } : undefined;
 
   return (
     <motion.div
@@ -43,15 +64,22 @@ function BentoCard({
         ${isLarge ? "md:col-span-2 min-h-[380px]" : "min-h-[280px]"}
         hover:scale-[1.01] transition-transform duration-500`}
     >
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <Image
-          src={service.image}
-          alt={service.title}
-          fill
-          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105 transition-transform"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+      {/* Background image — filter controlled by Framer Motion */}
+      <div ref={imageRef} className="absolute inset-0">
+        <motion.div
+          className="absolute inset-0"
+          animate={filterAnimate}
+          whileHover={filterHover}
+          transition={{ duration: 0.65, ease: "easeOut" }}
+        >
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            className="object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </motion.div>
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
       </div>
@@ -134,7 +162,7 @@ export default function BentoGrid() {
         </motion.p>
       </div>
 
-      {/* Bento grid — 2 cols, large cards span 2 */}
+      {/* Bento grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {siteConfig.sections.services.map((service, i) => (
           <BentoCard key={service.id} service={service} index={i} />
